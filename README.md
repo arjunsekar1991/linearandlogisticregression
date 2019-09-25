@@ -1,0 +1,2 @@
+# linearregressionfromscratch
+for y prediction
