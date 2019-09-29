@@ -51,16 +51,18 @@ class LinearRegressionScratch:
     def calculateMeanSquaredError(self):
         return self.costCalculatedInEveryIteration.mean()
 
-    def predictor(self,inputTestData):
+    def predictorMeanSquareError(self, inputTestData,actualValuesofYTest):
         inputTestData= numpy.c_[numpy.ones((len(inputTestData), 1)), inputTestData]
         prediction = numpy.dot(inputTestData, self.theta)
-        return prediction
+        meanSquareError = (1/self.numberOfInstances) * numpy.sum(numpy.square(prediction-actualValuesofYTest))
+        return prediction,meanSquareError
 linearRegressionScratchObject = LinearRegressionScratch(inputTrainingData, actualValuesofYTraining)
 theta = linearRegressionScratchObject.gradientDescent()
 
-print(linearRegressionScratchObject.theta)
-print("Mean Squared error",linearRegressionScratchObject.calculateMeanSquaredError())
+#print(linearRegressionScratchObject.theta)
+#print("Mean Squared error for model",linearRegressionScratchObject.calculateMeanSquaredError())
 
 
-predictedValues = linearRegressionScratchObject.predictor(inputTestData)
+predictedValues,meanSquaredErrorPrediction = linearRegressionScratchObject.predictorMeanSquareError(inputTestData, actualValuesofYTest)
 print("prediction",predictedValues)
+print("Mean Squared error for prediction",meanSquaredErrorPrediction)
