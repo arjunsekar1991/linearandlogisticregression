@@ -1,20 +1,20 @@
 import numpy
-inputTrainingData = numpy.array([[1,1], [2,2]])
-actualValuesofYTraining = numpy.array([[1,1], [2,2]])
+inputTrainingData = numpy.array([[1], [2]])
+actualValuesofYTraining = numpy.array([[1], [2]])
 
-inputTestData = numpy.array([[3,3],[4,4]])
-actualValuesofYTest =  numpy.array([[3,3],[4,4]])
+XTest = numpy.array([[3], [18]])
+YTest =  numpy.array([[3], [18]])
 
 class LinearRegressionScratch:
-    def __init__(self, inputDataFrameTraining, actualYTraining):
+    def __init__(self, XTrain, YTrain):
         self.MAX_ITER = 100000
-        self.numberOfInstances, self.numberOfFeatures = inputDataFrameTraining.shape
-        self.inputDataTraining = numpy.c_[numpy.ones((len(inputDataFrameTraining), 1)), inputDataFrameTraining]
+        self.numberOfInstances, self.numberOfFeatures = XTrain.shape
+        self.XTrain = numpy.c_[numpy.ones((len(XTrain), 1)), XTrain]
         self.costCalculatedInEveryIteration = numpy.zeros(self.MAX_ITER)
        # self.inputDataTest = numpy.c_[numpy.ones((len(inputDataFrameTest), 1)), inputDataFrameTest]
        # self.actualValuesOfYTest = actualYTest
         #print(self.inputData)
-        self.actualValuesOfY = actualYTraining
+        self.YTrain = YTrain
 
         #print("number of features",self.numberOfFeatures)
         self.theta = numpy.random.randn(self.numberOfFeatures+1,1)
@@ -26,8 +26,8 @@ class LinearRegressionScratch:
         # print(self.numberOfFeatures)
     def  calculateCostJTheta(self):
 
-        predictions = self.inputDataTraining.dot(self.theta)
-        cost = (1/2*self.numberOfInstances) * numpy.sum(numpy.square(predictions-self.actualValuesOfY))
+        predictions = self.XTrain.dot(self.theta)
+        cost = (1/2*self.numberOfInstances) * numpy.sum(numpy.square(predictions - self.YTrain))
         return cost
     def gradientDescent(self):
 
@@ -36,9 +36,9 @@ class LinearRegressionScratch:
 
         for iterationCounter in range(self.MAX_ITER):
 
-            prediction = numpy.dot(self.inputDataTraining, self.theta)
+            prediction = numpy.dot(self.XTrain, self.theta)
 
-            self.theta = self.theta -((1/self.numberOfInstances) * self.learningRate * (self.inputDataTraining.T.dot((prediction - self.actualValuesOfY))))
+            self.theta = self.theta -((1/self.numberOfInstances) * self.learningRate * (self.XTrain.T.dot((prediction - self.YTrain))))
            # print(self.theta)
             self.costCalculatedInEveryIteration[iterationCounter]  = self.calculateCostJTheta()
            # print(costCalculatedInEveryIteration[iterationCounter])
@@ -51,10 +51,10 @@ class LinearRegressionScratch:
     def calculateMeanSquaredError(self):
         return self.costCalculatedInEveryIteration.mean()
 
-    def predictorMeanSquareError(self, inputTestData,actualValuesofYTest):
-        inputTestData= numpy.c_[numpy.ones((len(inputTestData), 1)), inputTestData]
-        prediction = numpy.dot(inputTestData, self.theta)
-        meanSquareError = (1/self.numberOfInstances) * numpy.sum(numpy.square(prediction-actualValuesofYTest))
+    def predictorMeanSquareError(self, XTest, YTest):
+        XTest= numpy.c_[numpy.ones((len(XTest), 1)), XTest]
+        prediction = numpy.dot(XTest, self.theta)
+        meanSquareError = (1/self.numberOfInstances) * numpy.sum(numpy.square(prediction - YTest))
         return prediction,meanSquareError
 linearRegressionScratchObject = LinearRegressionScratch(inputTrainingData, actualValuesofYTraining)
 theta = linearRegressionScratchObject.gradientDescent()
@@ -63,6 +63,6 @@ theta = linearRegressionScratchObject.gradientDescent()
 #print("Mean Squared error for model",linearRegressionScratchObject.calculateMeanSquaredError())
 
 
-predictedValues,meanSquaredErrorPrediction = linearRegressionScratchObject.predictorMeanSquareError(inputTestData, actualValuesofYTest)
+predictedValues,meanSquaredErrorPrediction = linearRegressionScratchObject.predictorMeanSquareError(XTest, YTest)
 print("prediction",predictedValues)
 print("Mean Squared error for prediction",meanSquaredErrorPrediction)
