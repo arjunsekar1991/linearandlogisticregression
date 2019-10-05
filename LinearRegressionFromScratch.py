@@ -1,9 +1,13 @@
+from builtins import print
+
 import numpy
 import pandas
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
 dataWithColumnsRequired = rawData[['all_mcqs_avg_n20','STEP_1']]
+from sklearn.linear_model import LinearRegression
 #taking only the x values
 x = dataWithColumnsRequired.drop('STEP_1',axis=1).values
 #print(x)
@@ -11,7 +15,7 @@ x = dataWithColumnsRequired.drop('STEP_1',axis=1).values
 y = dataWithColumnsRequired.STEP_1.fillna(dataWithColumnsRequired.STEP_1.mean())
 
 
-XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.3)
+XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.2)
 #XTrain = numpy.array([[1], [2]])
 #YTrain = numpy.array([[1], [2]])
 
@@ -26,7 +30,7 @@ class LinearRegressionScratch:
         self.costCalculatedInEveryIteration = numpy.zeros(self.MAX_ITER)
        # self.inputDataTest = numpy.c_[numpy.ones((len(inputDataFrameTest), 1)), inputDataFrameTest]
        # self.actualValuesOfYTest = actualYTest
-        print(self.XTrain)
+        #print(self.XTrain)
         self.YTrain = YTrain
 
         #print("number of features",self.numberOfFeatures)
@@ -83,3 +87,8 @@ print("prediction",predictedValues)
 print("Mean Squared error for prediction",meanSquaredErrorPrediction)
 
 print(mean_squared_error(YTest, predictedValues, multioutput='raw_values'))
+print(r2_score(YTest, predictedValues))
+
+reg = LinearRegression()
+model = reg.fit(XTrain, YTrain)
+print(reg.score(XTest,YTest))
