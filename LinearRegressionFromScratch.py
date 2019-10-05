@@ -1,9 +1,22 @@
 import numpy
-inputTrainingData = numpy.array([[1], [2]])
-actualValuesofYTraining = numpy.array([[1], [2]])
+import pandas
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
+dataWithColumnsRequired = rawData[['all_mcqs_avg_n20','STEP_1']]
+#taking only the x values
+x = dataWithColumnsRequired.drop('STEP_1',axis=1).values
+#print(x)
+#taking only y values with mean in the place of na
+y = dataWithColumnsRequired.STEP_1.fillna(dataWithColumnsRequired.STEP_1.mean())
 
-XTest = numpy.array([[3], [18]])
-YTest =  numpy.array([[3], [18]])
+
+XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.3)
+#XTrain = numpy.array([[1], [2]])
+#YTrain = numpy.array([[1], [2]])
+
+#XTest = numpy.array([[3], [18]])
+#YTest =  numpy.array([[3], [18]])
 
 class LinearRegressionScratch:
     def __init__(self, XTrain, YTrain):
@@ -13,11 +26,12 @@ class LinearRegressionScratch:
         self.costCalculatedInEveryIteration = numpy.zeros(self.MAX_ITER)
        # self.inputDataTest = numpy.c_[numpy.ones((len(inputDataFrameTest), 1)), inputDataFrameTest]
        # self.actualValuesOfYTest = actualYTest
-        #print(self.inputData)
+        print(self.XTrain)
         self.YTrain = YTrain
 
         #print("number of features",self.numberOfFeatures)
-        self.theta = numpy.random.randn(self.numberOfFeatures+1,1)
+        #self.theta = numpy.random.randn(self.numberOfFeatures+1,1)
+        self.theta = numpy.zeros(self.numberOfFeatures+1)
        # print(self.theta)
         self.learningRate =0.01
 
@@ -42,7 +56,7 @@ class LinearRegressionScratch:
            # print(self.theta)
             self.costCalculatedInEveryIteration[iterationCounter]  = self.calculateCostJTheta()
            # print(costCalculatedInEveryIteration[iterationCounter])
-            if iterationCounter!=0 and self.costCalculatedInEveryIteration[iterationCounter]-self.costCalculatedInEveryIteration[iterationCounter-1]== 0.001:
+            if iterationCounter!=0 and self.costCalculatedInEveryIteration[iterationCounter]>self.costCalculatedInEveryIteration[iterationCounter-1]:
                 print("optimum cost reached")
                 break;
 
@@ -54,15 +68,18 @@ class LinearRegressionScratch:
     def predictorMeanSquareError(self, XTest, YTest):
         XTest= numpy.c_[numpy.ones((len(XTest), 1)), XTest]
         prediction = numpy.dot(XTest, self.theta)
-        meanSquareError = (1/self.numberOfInstances) * numpy.sum(numpy.square(prediction - YTest))
+        numberOfTestInstance = len(YTest)
+        meanSquareError = (1/numberOfTestInstance) * numpy.sum(numpy.square(prediction - YTest))
         return prediction,meanSquareError
-linearRegressionScratchObject = LinearRegressionScratch(inputTrainingData, actualValuesofYTraining)
+linearRegressionScratchObject = LinearRegressionScratch(XTrain, YTrain)
 theta = linearRegressionScratchObject.gradientDescent()
 
-#print(linearRegressionScratchObject.theta)
+print(linearRegressionScratchObject.theta)
 #print("Mean Squared error for model",linearRegressionScratchObject.calculateMeanSquaredError())
 
 
 predictedValues,meanSquaredErrorPrediction = linearRegressionScratchObject.predictorMeanSquareError(XTest, YTest)
 print("prediction",predictedValues)
 print("Mean Squared error for prediction",meanSquaredErrorPrediction)
+
+print(mean_squared_error(YTest, predictedValues, multioutput='raw_values'))
