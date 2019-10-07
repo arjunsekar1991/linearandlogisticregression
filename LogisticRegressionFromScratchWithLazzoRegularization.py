@@ -11,7 +11,7 @@ from sklearn.preprocessing import LabelEncoder
 
 class LogisticRegression:
 
-    def __init__(self, XTrain, YTrain, normalization=True):
+    def __init__(self, XTrain, YTrain,lambdaValue, normalization=True):
         self.MAX_ITER = 100000
         #print(XTrain)x`
         self.numberOfInstances, self.numberOfFeatures = XTrain.shape
@@ -22,7 +22,7 @@ class LogisticRegression:
         self.YTrain = YTrain.to_numpy().reshape(self.numberOfInstances,1)
         self.theta = []
         self.costCalculated = []
-        self.Lambda = 0.1
+        self.Lambda = lambdaValue
       #  print(self.theta)
         self.learningRate =0.08
       #  print(self.numberOfClasses)
@@ -157,35 +157,37 @@ y= ynonfactor.replace(to_replace=['A', 'B','C','D'], value=[0,1,2,3])
 XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.4,random_state=0)
 print()
 
+lambdaList=[0.001,0.01,0.1,1,10]
 
-logisticRegressionObject = LogisticRegression(XTrain, YTrain)
-#from sklearn.cross_validation
-from sklearn import metrics
-#scores = cross_val_score(logisticRegressionObject, XTrain, YTrain, cv=6)
-theta = logisticRegressionObject.gradientDescent()
-print(theta)
-logisticRegressionObject.costPlot()
-predictedLabels = logisticRegressionObject.predict(XTest)
-#print(numpy.c_[y_test,pv])x
-print(predictedLabels)
-truelabels = numpy.array(YTest, dtype=int).flatten().tolist()
+for lmdaValue in lambdaList:
+    logisticRegressionObject = LogisticRegression(XTrain, YTrain,lmdaValue)
+    #from sklearn.cross_validation
+    from sklearn import metrics
+    #scores = cross_val_score(logisticRegressionObject, XTrain, YTrain, cv=6)
+    theta = logisticRegressionObject.gradientDescent()
+    print(theta)
+    logisticRegressionObject.costPlot()
+    predictedLabels = logisticRegressionObject.predict(XTest)
+    #print(numpy.c_[y_test,pv])x
+    print(predictedLabels)
+    truelabels = numpy.array(YTest, dtype=int).flatten().tolist()
 
-print(truelabels)
-print(confusion_matrix(truelabels, predictedLabels, labels=numpy.unique(YTrain)))
-fig, ax = plt.subplots(figsize=(8,8))
-ax = fig.add_axes([0.4,0.2,0.5,0.6])
-ax2=sn.heatmap(confusion_matrix(truelabels, predictedLabels), annot=True, fmt='g', yticklabels=numpy.unique(YTrain), xticklabels=numpy.unique(predictedLabels), ax=ax, linewidths=0.1, square=True);
-bottom, top = ax2.get_ylim()
-ax2.set_ylim(bottom + 0.5, top - 0.5)
-plt.ylabel('True Label')
-plt.xlabel('Predicted Label')
-plt.title('Confusion Matrix')
-plt.show()
-#con.plot()
-print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(predictedLabels)))
+    print(truelabels)
+    print(confusion_matrix(truelabels, predictedLabels, labels=numpy.unique(YTrain)))
+    fig, ax = plt.subplots(figsize=(8,8))
+    ax = fig.add_axes([0.4,0.2,0.5,0.6])
+    ax2=sn.heatmap(confusion_matrix(truelabels, predictedLabels), annot=True, fmt='g', yticklabels=numpy.unique(YTrain), xticklabels=numpy.unique(predictedLabels), ax=ax, linewidths=0.1, square=True);
+    bottom, top = ax2.get_ylim()
+    ax2.set_ylim(bottom + 0.5, top - 0.5)
+    plt.ylabel('True Label')
+    plt.xlabel('Predicted Label')
+    plt.title('Confusion Matrix')
+    plt.show()
+    #con.plot()
+    print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(predictedLabels)))
 
-#clf = LogisticRegression()
+    #clf = LogisticRegression()
 
 
-#clf.fit(XTrain,YTrain)
-#print(clf.theta)
+    #clf.fit(XTrain,YTrain)
+    #print(clf.theta)
