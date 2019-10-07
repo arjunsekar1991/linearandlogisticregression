@@ -37,9 +37,9 @@ class LogisticRegression:
             cost = 1/self.numberOfInstances * sum(error)
             #print("every",cost,"\n")
            #Ridge
-            regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(theta**2)
+            #regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(theta**2)
             #Lasso
-            #regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(abs(theta))
+            regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(abs(theta))
             #Lasso
 
             return regCost
