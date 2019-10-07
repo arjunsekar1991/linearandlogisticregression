@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 class LogisticRegression:
 
     def __init__(self, XTrain, YTrain, normalization=True):
-        self.MAX_ITER = 1000000
+        self.MAX_ITER = 100000
         #print(XTrain)x`
         self.numberOfInstances, self.numberOfFeatures = XTrain.shape
        # print(self.numberOfFeatures)
@@ -23,7 +23,7 @@ class LogisticRegression:
         self.theta = []
         self.costCalculated = []
       #  print(self.theta)
-        self.learningRate =0.7
+        self.learningRate =0.08
       #  print(self.numberOfClasses)
     def  calculateCostJTheta(self,theta,YTrainOneVSALL):
        # print("theta",theta)
@@ -72,7 +72,7 @@ class LogisticRegression:
                 if i!=0:
                     #thres =costCalculatedInEveryIterationForEachClass[i]-costCalculatedInEveryIterationForEachClass[i-1]
                     #print(costCalculatedInEveryIterationForEachClass[i])
-                    if costCalculatedInEveryIterationForEachClass[i]>costCalculatedInEveryIterationForEachClass[i-1]:
+                    if (costCalculatedInEveryIterationForEachClass[i]>costCalculatedInEveryIterationForEachClass[i-1]):
                         #print(thres)
                         print("optimum cost reached at" , i)
                         break
@@ -108,11 +108,13 @@ class LogisticRegression:
               # for k in len(X):
                 #print(maximumLikelihood)
                 data_tuples = list(zip(maximumLikelihood[0],maximumLikelihood[1],maximumLikelihood[2],maximumLikelihood[3]))
+                print(data_tuples)
 
                 #print(data_tuples)
                 likelihoodlist =[]
                 for tuplecounter in range(len(data_tuples)):
                     likelihoodlist.append(numpy.array(data_tuples[tuplecounter]))
+                print(likelihoodlist)
                 #print("final",likelihoodlist)
                 for k in range(len(likelihoodlist)):
                     finalPrediction.append(numpy.argmax(likelihoodlist[k]))
@@ -140,7 +142,7 @@ ynonfactor = dataWithColumnsRequiredWithoutNull.LEVEL
 y= ynonfactor.replace(to_replace=['A', 'B','C','D'], value=[0,1,2,3])
 
 #print(y)
-XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.2,random_state=0)
+XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.4,random_state=0)
 print()
 
 
@@ -159,13 +161,13 @@ a = numpy.array(YTest,dtype=int).flatten().tolist()
 print(a)
 print(confusion_matrix(a, pv,labels=numpy.unique(YTrain)))
 
-sn.heatmap(confusion_matrix(a,pv),annot=True,fmt='g',yticklabels=numpy.unique(YTrain),xticklabels=numpy.unique(YTrain));
+sn.heatmap(confusion_matrix(a,pv),annot=True,fmt='g',yticklabels=numpy.unique(YTrain),xticklabels=numpy.unique(pv));
 plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 plt.title('Confusion Matrix')
 plt.show()
 #con.plot()
-print(f1_score(a, pv, average='macro'))
+print(f1_score(a, pv, average='macro', labels=numpy.unique(pv)))
 
 #clf = LogisticRegression()
 
