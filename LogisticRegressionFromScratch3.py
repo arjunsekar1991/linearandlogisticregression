@@ -12,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 class LogisticRegression:
 
     def __init__(self, XTrain, YTrain, normalization=True):
-        self.MAX_ITER = 10000000
+        self.MAX_ITER = 1000000
         #print(XTrain)x`
         self.numberOfInstances, self.numberOfFeatures = XTrain.shape
        # print(self.numberOfFeatures)
@@ -23,7 +23,7 @@ class LogisticRegression:
         self.theta = []
         self.costCalculated = []
       #  print(self.theta)
-        self.learningRate =1
+        self.learningRate =0.08
       #  print(self.numberOfClasses)
     def  calculateCostJTheta(self,theta,YTrainOneVSALL):
        # print("theta",theta)
@@ -45,8 +45,8 @@ class LogisticRegression:
         self.XTrain = numpy.c_[numpy.ones((len(nonregulazied), 1)), nonregulazied]
 
 
-        th =  numpy.random.rand(self.numberOfFeatures+1,1)
-        #th =  numpy.zeros(self.numberOfFeatures+1).reshape(self.numberOfFeatures+1,1)
+        #th =  numpy.random.rand(self.numberOfFeatures+1,1)
+        th =  numpy.zeros(self.numberOfFeatures+1).reshape(self.numberOfFeatures+1,1)
         print(th)
        # print(self.XTrain)
 
@@ -140,7 +140,7 @@ ynonfactor = dataWithColumnsRequiredWithoutNull.LEVEL
 y= ynonfactor.replace(to_replace=['A', 'B','C','D'], value=[0,1,2,3])
 
 #print(y)
-XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.1,random_state=0)
+XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.4,random_state=0)
 print()
 
 
@@ -165,7 +165,7 @@ plt.xlabel('Predicted Label')
 plt.title('Confusion Matrix')
 plt.show()
 #con.plot()
-print(f1_score(a, pv, average='micro'))
+print(f1_score(a, pv, average='macro',labels=numpy.unique(YTest)))
 
 #clf = LogisticRegression()
 
