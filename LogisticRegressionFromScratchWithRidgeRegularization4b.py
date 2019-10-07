@@ -22,29 +22,34 @@ class LogisticRegression:
         self.YTrain = YTrain.to_numpy().reshape(self.numberOfInstances,1)
         self.theta = []
         self.costCalculated = []
-      #  print(self.theta)
-        self.learningRate =0.7
         self.Lambda = 0.1
+      #  print(self.theta)
+        self.learningRate =0.08
       #  print(self.numberOfClasses)
+
     def  calculateCostJTheta(self,theta,YTrainOneVSALL):
-       # print("theta",theta)
-        predictions =  1/(1+numpy.exp(-self.XTrain.dot(theta)))
-        #print("predictions",predictions)
-        #for x in predictions:
-        error = (-YTrainOneVSALL * numpy.log(predictions)) - ((1-YTrainOneVSALL)*numpy.log(1-predictions))
-        #print("error",error)
-        cost = 1/self.numberOfInstances * sum(error)
-        #print("every",cost,"\n")
-       #Ridge
-        regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(theta**2)
-        #Lasso
-        #regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(abs(theta))
-        #Lasso
+           # print("theta",theta)
+            predictions =  1/(1+numpy.exp(-self.XTrain.dot(theta)))
+            #print("predictions",predictions)
+            #for x in predictions:
+            error = (-YTrainOneVSALL * numpy.log(predictions)) - ((1-YTrainOneVSALL)*numpy.log(1-predictions))
+            #print("error",error)
+            cost = 1/self.numberOfInstances * sum(error)
+            #print("every",cost,"\n")
+           #Ridge
+            regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(theta**2)
+            #Lasso
+            #regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(abs(theta))
+            #Lasso
 
-        return regCost
-
+            return regCost
+    def costPlot(self):
+        for x in range(len(self.costCalculated)):
+            plt.plot(self.costCalculated[x])
+            plt.ylabel('Epochs')
+            plt.xlabel('Cost jThetha')
     def gradientDescent(self):
-        nonregulazied =self.XTrain
+        #nonregulazied =self.XTrain
         #print(nonregulazied)
         regularized = (self.XTrain - self.XTrain.mean())/(self.XTrain.max()-self.XTrain.min())
         #regularized= self.featureScalingUsingMinMaxNormalization(nonregulazied)
@@ -52,8 +57,8 @@ class LogisticRegression:
         self.XTrain = numpy.c_[numpy.ones((len(regularized), 1)), regularized]
 
 
-        th =  numpy.random.rand(self.numberOfFeatures+1,1)
-        #th =  numpy.zeros(self.numberOfFeatures+1).reshape(self.numberOfFeatures+1,1)
+        #th =  numpy.random.rand(self.numberOfFeatures+1,1)
+        th =  numpy.zeros(self.numberOfFeatures+1).reshape(self.numberOfFeatures+1,1)
         print(th)
        # print(self.XTrain)
 
@@ -79,13 +84,12 @@ class LogisticRegression:
                 if i!=0:
                     #thres =costCalculatedInEveryIterationForEachClass[i]-costCalculatedInEveryIterationForEachClass[i-1]
                     #print(costCalculatedInEveryIterationForEachClass[i])
-                    if costCalculatedInEveryIterationForEachClass[i]>costCalculatedInEveryIterationForEachClass[i-1]:
+                    if (costCalculatedInEveryIterationForEachClass[i]>costCalculatedInEveryIterationForEachClass[i-1]):
                         #print(thres)
                         print("optimum cost reached at" , i)
                         break
                 prediction = 1/(1+numpy.exp(-self.XTrain.dot(th)))
-                th = th - (self.learningRate *((1/ self.numberOfInstances) * (self.XTrain.T).dot(prediction - YTrainOneVSALL)+(th* (self.Lambda/self.numberOfInstances))))
-                th[0] = th[0]- (self.learningRate / self.numberOfInstances) * (self.XTrain.T).dot(prediction - YTrainOneVSALL)[0]
+                th = th - (self.learningRate / self.numberOfInstances) * (self.XTrain.T).dot(prediction - YTrainOneVSALL)
 
                 i+=1
             self.theta.append(th)
@@ -116,11 +120,13 @@ class LogisticRegression:
               # for k in len(X):
                 #print(maximumLikelihood)
                 data_tuples = list(zip(maximumLikelihood[0],maximumLikelihood[1],maximumLikelihood[2],maximumLikelihood[3]))
+                print(data_tuples)
 
                 #print(data_tuples)
                 likelihoodlist =[]
                 for tuplecounter in range(len(data_tuples)):
                     likelihoodlist.append(numpy.array(data_tuples[tuplecounter]))
+                print(likelihoodlist)
                 #print("final",likelihoodlist)
                 for k in range(len(likelihoodlist)):
                     finalPrediction.append(numpy.argmax(likelihoodlist[k]))
@@ -137,8 +143,6 @@ class LogisticRegression:
 
                 return finalPrediction
 
-
-
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
 dataWithColumnsRequired = rawData[['all_NBME_avg_n4','all_mcqs_avg_n20','LEVEL']]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
@@ -150,7 +154,7 @@ ynonfactor = dataWithColumnsRequiredWithoutNull.LEVEL
 y= ynonfactor.replace(to_replace=['A', 'B','C','D'], value=[0,1,2,3])
 
 #print(y)
-XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.2,random_state=0)
+XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.4,random_state=0)
 print()
 
 
@@ -160,22 +164,25 @@ from sklearn import metrics
 #scores = cross_val_score(logisticRegressionObject, XTrain, YTrain, cv=6)
 theta = logisticRegressionObject.gradientDescent()
 print(theta)
-
-pv = logisticRegressionObject.predict(XTest)
+logisticRegressionObject.costPlot()
+predictedLabels = logisticRegressionObject.predict(XTest)
 #print(numpy.c_[y_test,pv])x
-print(pv)
-a = numpy.array(YTest,dtype=int).flatten().tolist()
+print(predictedLabels)
+truelabels = numpy.array(YTest, dtype=int).flatten().tolist()
 
-print(a)
-print(confusion_matrix(a, pv,labels=numpy.unique(YTrain)))
-
-sn.heatmap(confusion_matrix(a,pv),annot=True,fmt='g',yticklabels=numpy.unique(YTrain),xticklabels=numpy.unique(YTrain));
+print(truelabels)
+print(confusion_matrix(truelabels, predictedLabels, labels=numpy.unique(YTrain)))
+fig, ax = plt.subplots(figsize=(8,8))
+ax = fig.add_axes([0.4,0.2,0.5,0.6])
+ax2=sn.heatmap(confusion_matrix(truelabels, predictedLabels), annot=True, fmt='g', yticklabels=numpy.unique(YTrain), xticklabels=numpy.unique(predictedLabels), ax=ax, linewidths=0.1, square=True);
+bottom, top = ax2.get_ylim()
+ax2.set_ylim(bottom + 0.5, top - 0.5)
 plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 plt.title('Confusion Matrix')
 plt.show()
 #con.plot()
-print(f1_score(a, pv, average='macro'))
+print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(predictedLabels)))
 
 #clf = LogisticRegression()
 
