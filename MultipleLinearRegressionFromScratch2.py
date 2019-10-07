@@ -1,5 +1,5 @@
 from builtins import print
-
+import matplotlib.pyplot as plt
 import numpy
 import pandas
 from sklearn.model_selection import train_test_split
@@ -37,9 +37,20 @@ class LinearRegressionScratch:
         #self.theta = numpy.random.randn(self.numberOfFeatures+1,1)
         self.theta = numpy.zeros(self.numberOfFeatures+1)
        # print(self.theta)
-        self.learningRate =0.01
+        #below is accurate setting
+        #self.learningRate =0.01
+        self.learningRate =0.001
 
 
+        # print(self.numberOfInstances)
+        # print(self.numberOfFeatures)
+    def costPlot(self):
+        fig, ax = plt.subplots(figsize=(8,8))
+        print("values of jtheta",self.costCalculatedInEveryIteration)
+        plt.plot(self.costCalculatedInEveryIteration)
+        plt.ylabel('Epochs')
+        plt.xlabel('Cost jThetha')
+        plt.show()
         # print(self.numberOfInstances)
         # print(self.numberOfFeatures)
     def  calculateCostJTheta(self):
@@ -77,7 +88,7 @@ class LinearRegressionScratch:
         return prediction,meanSquareError
 linearRegressionScratchObject = LinearRegressionScratch(XTrain, YTrain)
 theta = linearRegressionScratchObject.gradientDescent()
-
+linearRegressionScratchObject.costPlot()
 print(linearRegressionScratchObject.theta)
 #print("Mean Squared error for model",linearRegressionScratchObject.calculateMeanSquaredError())
 
