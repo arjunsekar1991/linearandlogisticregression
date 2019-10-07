@@ -35,7 +35,11 @@ class LogisticRegression:
         cost = 1/self.numberOfInstances * sum(error)
         #print("every",cost,"\n")
         return cost
-
+    def costPlot(self):
+        for x in range(len(self.costCalculated)):
+            plt.plot(self.costCalculated[x])
+            plt.ylabel('Epochs')
+            plt.xlabel('Cost jThetha')
     def gradientDescent(self):
         nonregulazied =self.XTrain
         #print(nonregulazied)
@@ -152,22 +156,25 @@ from sklearn import metrics
 #scores = cross_val_score(logisticRegressionObject, XTrain, YTrain, cv=6)
 theta = logisticRegressionObject.gradientDescent()
 print(theta)
-
-pv = logisticRegressionObject.predict(XTest)
+logisticRegressionObject.costPlot()
+predictedLabels = logisticRegressionObject.predict(XTest)
 #print(numpy.c_[y_test,pv])x
-print(pv)
-a = numpy.array(YTest,dtype=int).flatten().tolist()
+print(predictedLabels)
+truelabels = numpy.array(YTest, dtype=int).flatten().tolist()
 
-print(a)
-print(confusion_matrix(a, pv,labels=numpy.unique(YTrain)))
-
-sn.heatmap(confusion_matrix(a,pv),annot=True,fmt='g',yticklabels=numpy.unique(YTrain),xticklabels=numpy.unique(pv));
+print(truelabels)
+print(confusion_matrix(truelabels, predictedLabels, labels=numpy.unique(YTrain)))
+fig, ax = plt.subplots(figsize=(8,8))
+ax = fig.add_axes([0.4,0.2,0.5,0.6])
+ax2=sn.heatmap(confusion_matrix(truelabels, predictedLabels), annot=True, fmt='g', yticklabels=numpy.unique(YTrain), xticklabels=numpy.unique(predictedLabels), ax=ax, linewidths=0.1, square=True);
+bottom, top = ax2.get_ylim()
+ax2.set_ylim(bottom + 0.5, top - 0.5)
 plt.ylabel('True Label')
 plt.xlabel('Predicted Label')
 plt.title('Confusion Matrix')
 plt.show()
 #con.plot()
-print(f1_score(a, pv, average='macro', labels=numpy.unique(pv)))
+print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(predictedLabels)))
 
 #clf = LogisticRegression()
 
