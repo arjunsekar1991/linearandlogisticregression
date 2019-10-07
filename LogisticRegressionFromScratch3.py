@@ -23,7 +23,7 @@ class LogisticRegression:
         self.theta = []
         self.costCalculated = []
       #  print(self.theta)
-        self.learningRate =0.08
+        self.learningRate =0.7
       #  print(self.numberOfClasses)
     def  calculateCostJTheta(self,theta,YTrainOneVSALL):
        # print("theta",theta)
@@ -140,7 +140,7 @@ ynonfactor = dataWithColumnsRequiredWithoutNull.LEVEL
 y= ynonfactor.replace(to_replace=['A', 'B','C','D'], value=[0,1,2,3])
 
 #print(y)
-XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.4,random_state=0)
+XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.2,random_state=0)
 print()
 
 
@@ -165,7 +165,7 @@ plt.xlabel('Predicted Label')
 plt.title('Confusion Matrix')
 plt.show()
 #con.plot()
-print(f1_score(a, pv, average='macro',labels=numpy.unique(YTest)))
+print(f1_score(a, pv, average='macro'))
 
 #clf = LogisticRegression()
 
