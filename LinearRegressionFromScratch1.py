@@ -34,10 +34,12 @@ class LinearRegressionScratch:
         self.YTrain = YTrain
 
         #print("number of features",self.numberOfFeatures)
-        #self.theta = numpy.random.randn(self.numberOfFeatures+1,1)
-        self.theta = numpy.zeros(self.numberOfFeatures+1)
+        self.theta = numpy.random.randn(1,self.numberOfFeatures+1).flatten()
+
+        #self.theta = numpy.zeros(self.numberOfFeatures+1)
+        print(self.theta)
        # print(self.theta)
-        self.learningRate =0.001
+        self.learningRate =0.01
 
     def costPlot(self):
         fig, ax = plt.subplots(figsize=(8,8))

@@ -119,7 +119,7 @@ class LogisticRegression:
                 ##print(data)
               # for k in len(X):
                 #print(maximumLikelihood)
-                data_tuples = list(zip(maximumLikelihood[0],maximumLikelihood[1],maximumLikelihood[2],maximumLikelihood[3]))
+                data_tuples = list(zip(*maximumLikelihood))
                 print(data_tuples)
 
                 #print(data_tuples)

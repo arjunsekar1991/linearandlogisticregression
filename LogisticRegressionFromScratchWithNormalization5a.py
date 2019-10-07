@@ -22,31 +22,39 @@ class LogisticRegression:
         self.YTrain = YTrain.to_numpy().reshape(self.numberOfInstances,1)
         self.theta = []
         self.costCalculated = []
+        self.Lambda = 0.1
       #  print(self.theta)
         self.learningRate =0.08
       #  print(self.numberOfClasses)
+
     def  calculateCostJTheta(self,theta,YTrainOneVSALL):
-       # print("theta",theta)
-        predictions =  1/(1+numpy.exp(-self.XTrain.dot(theta)))
-        #print("predictions",predictions)
-        #for x in predictions:
-        error = (-YTrainOneVSALL * numpy.log(predictions)) - ((1-YTrainOneVSALL)*numpy.log(1-predictions))
-        #print("error",error)
-        cost = 1/self.numberOfInstances * sum(error)
-        #print("every",cost,"\n")
-        return cost
+           # print("theta",theta)
+            predictions =  1/(1+numpy.exp(-self.XTrain.dot(theta)))
+            #print("predictions",predictions)
+            #for x in predictions:
+            error = (-YTrainOneVSALL * numpy.log(predictions)) - ((1-YTrainOneVSALL)*numpy.log(1-predictions))
+            #print("error",error)
+            cost = 1/self.numberOfInstances * sum(error)
+            #print("every",cost,"\n")
+           #Ridge
+            regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(theta**2)
+            #Lasso
+            #regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(abs(theta))
+            #Lasso
+
+            return regCost
     def costPlot(self):
         for x in range(len(self.costCalculated)):
             plt.plot(self.costCalculated[x])
             plt.ylabel('Epochs')
             plt.xlabel('Cost jThetha')
     def gradientDescent(self):
-        nonregulazied =self.XTrain
+        #nonregulazied =self.XTrain
         #print(nonregulazied)
         regularized = (self.XTrain - self.XTrain.mean())/(self.XTrain.max()-self.XTrain.min())
         #regularized= self.featureScalingUsingMinMaxNormalization(nonregulazied)
         #print(regularized)
-        self.XTrain = numpy.c_[numpy.ones((len(nonregulazied), 1)), nonregulazied]
+        self.XTrain = numpy.c_[numpy.ones((len(regularized), 1)), regularized]
 
 
         #th =  numpy.random.rand(self.numberOfFeatures+1,1)
@@ -92,7 +100,7 @@ class LogisticRegression:
 
     def predict(self,X):
                # X = self.featureScalingUsingMinMaxNormalization(X)
-                #X=(X - X.mean())/(X.max()-X.min())
+                X=(X - X.mean())/(X.max()-X.min())
                 X = numpy.c_[numpy.ones((len(X), 1)), X]
                 #print(X)
                 maximumLikelihood = []
@@ -136,7 +144,7 @@ class LogisticRegression:
                 return finalPrediction
 
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
-dataWithColumnsRequired = rawData[['all_NBME_avg_n4','all_mcqs_avg_n20','LEVEL']]
+dataWithColumnsRequired = rawData[[  'CBSE_01',  'CBSE_02','LEVEL' ]]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
 
 

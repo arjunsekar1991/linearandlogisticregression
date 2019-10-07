@@ -5,7 +5,17 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
 import pandas
 from sklearn.model_selection import train_test_split
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
+# Feature Extraction with Univariate Statistical Tests (Chi-squared for classification)
+import pandas
+import numpy
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
+from sklearn import decomposition
+from sklearn import datasets
 from sklearn.preprocessing import LabelEncoder
 
 
@@ -23,13 +33,14 @@ class LogisticRegression:
         self.theta = []
         self.costCalculated = []
       #  print(self.theta)
-        self.learningRate =0.08
+        self.learningRate =0.001
       #  print(self.numberOfClasses)
     def  calculateCostJTheta(self,theta,YTrainOneVSALL):
        # print("theta",theta)
         predictions =  1/(1+numpy.exp(-self.XTrain.dot(theta)))
         #print("predictions",predictions)
         #for x in predictions:
+
         error = (-YTrainOneVSALL * numpy.log(predictions)) - ((1-YTrainOneVSALL)*numpy.log(1-predictions))
         #print("error",error)
         cost = 1/self.numberOfInstances * sum(error)
@@ -49,8 +60,8 @@ class LogisticRegression:
         self.XTrain = numpy.c_[numpy.ones((len(nonregulazied), 1)), nonregulazied]
 
 
-        #th =  numpy.random.rand(self.numberOfFeatures+1,1)
-        th =  numpy.zeros(self.numberOfFeatures+1).reshape(self.numberOfFeatures+1,1)
+        th =  numpy.random.rand(self.numberOfFeatures+1,1)
+        #th =  numpy.zeros(self.numberOfFeatures+1).reshape(self.numberOfFeatures+1,1)
         print(th)
        # print(self.XTrain)
 
@@ -136,16 +147,32 @@ class LogisticRegression:
                 return finalPrediction
 
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
-dataWithColumnsRequired = rawData[['all_NBME_avg_n4','all_mcqs_avg_n20','LEVEL']]
+dataWithColumnsRequired = rawData[[  'CBSE_01',  'CBSE_02','LEVEL' ]]
+#dataWithColumnsRequired = rawData[[  'CBSE_01',  'CBSE_02','LEVEL' ]]
+#dataWithColumnsRequired = rawData[[  'all_mcqs_avg_n20', 'all_NBME_avg_n4','LEVEL' ]]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
 
 
 x = dataWithColumnsRequiredWithoutNull.drop('LEVEL',axis=1).values
 ynonfactor = dataWithColumnsRequiredWithoutNull.LEVEL
-
 y= ynonfactor.replace(to_replace=['A', 'B','C','D'], value=[0,1,2,3])
+#feature selection
 
+'''
+test = SelectKBest(score_func=chi2, k=4)
+fit = test.fit(x, y)
+# summarize scores
+numpy.set_printoptions(precision=3)
+print(fit.scores_)
+features = fit.transform(x)
+# summarize selected features
+print("feature importance",features[0:5,:])
+#end Feature selection
 #print(y)
+
+'''
+
+
 XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.4,random_state=0)
 print()
 
