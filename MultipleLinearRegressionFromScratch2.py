@@ -106,10 +106,10 @@ print(linearRegressionScratchObject.theta)
 
 predictedValues,meanSquaredErrorPrediction = linearRegressionScratchObject.predictorMeanSquareError(XTest, YTest)
 print("prediction",predictedValues)
-print("Mean Squared error for prediction",meanSquaredErrorPrediction)
+print("Mean Squared error for prediction my score",meanSquaredErrorPrediction)
 linearRegressionScratchObject.showModel(XTest, YTest)
 print(mean_squared_error(YTest, predictedValues, multioutput='raw_values'))
-print(r2_score(YTest, predictedValues))
+print("my model r2 value",r2_score(YTest, predictedValues))
 
 reg = LinearRegression()
 model = reg.fit(XTrain, YTrain)
