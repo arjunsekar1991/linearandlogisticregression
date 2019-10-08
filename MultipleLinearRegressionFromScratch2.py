@@ -39,7 +39,7 @@ class LinearRegressionScratch:
        # print(self.theta)
         #below is accurate setting
         #self.learningRate =0.01
-        self.learningRate =0.001
+        self.learningRate =0.01
 
 
         # print(self.numberOfInstances)
@@ -86,6 +86,17 @@ class LinearRegressionScratch:
         numberOfTestInstance = len(YTest)
         meanSquareError = (1/numberOfTestInstance) * numpy.sum(numpy.square(prediction - YTest))
         return prediction,meanSquareError
+    def showModel(self,XTest,YTest):
+        XTest = numpy.sum(XTest,axis=1)
+        print("xtest1",XTest)
+        print("xtest",min(numpy.array(XTest)))
+        print("ytest",min(numpy.array(YTest)))
+        plt.xlabel("XTest")
+        plt.ylabel("YTest")
+        plt.scatter(XTest,YTest)
+
+        plt.plot([min(numpy.array(XTest)),max(numpy.array(XTest))],[min(numpy.array(YTest)),max(numpy.array(YTest))],color ="yellow")
+        plt.show()
 linearRegressionScratchObject = LinearRegressionScratch(XTrain, YTrain)
 theta = linearRegressionScratchObject.gradientDescent()
 linearRegressionScratchObject.costPlot()
@@ -96,7 +107,7 @@ print(linearRegressionScratchObject.theta)
 predictedValues,meanSquaredErrorPrediction = linearRegressionScratchObject.predictorMeanSquareError(XTest, YTest)
 print("prediction",predictedValues)
 print("Mean Squared error for prediction",meanSquaredErrorPrediction)
-
+linearRegressionScratchObject.showModel(XTest, YTest)
 print(mean_squared_error(YTest, predictedValues, multioutput='raw_values'))
 print(r2_score(YTest, predictedValues))
 

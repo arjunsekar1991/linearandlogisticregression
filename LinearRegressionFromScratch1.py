@@ -40,6 +40,7 @@ class LinearRegressionScratch:
         print(self.theta)
        # print(self.theta)
         self.learningRate =0.01
+        #self.learningRate =10
 
     def costPlot(self):
         fig, ax = plt.subplots(figsize=(8,8))
@@ -83,6 +84,16 @@ class LinearRegressionScratch:
         numberOfTestInstance = len(YTest)
         meanSquareError = (1/numberOfTestInstance) * numpy.sum(numpy.square(prediction - YTest))
         return prediction,meanSquareError
+    def showModel(self,XTest,YTest):
+        print("xtest",min(numpy.array(XTest)))
+        print("ytest",min(numpy.array(YTest)))
+        plt.xlabel("XTest")
+        plt.ylabel("YTest")
+        plt.scatter(XTest,YTest)
+
+        plt.plot([min(numpy.array(XTest)),max(numpy.array(XTest))],[min(numpy.array(YTest)),max(numpy.array(YTest))],color ="yellow")
+        plt.show()
+
 linearRegressionScratchObject = LinearRegressionScratch(XTrain, YTrain)
 theta = linearRegressionScratchObject.gradientDescent()
 
@@ -93,10 +104,11 @@ linearRegressionScratchObject.costPlot()
 predictedValues,meanSquaredErrorPrediction = linearRegressionScratchObject.predictorMeanSquareError(XTest, YTest)
 print("prediction",predictedValues)
 print("Mean Squared error for prediction",meanSquaredErrorPrediction)
-
+linearRegressionScratchObject.showModel(XTest, YTest)
 print(mean_squared_error(YTest, predictedValues, multioutput='raw_values'))
 print(r2_score(YTest, predictedValues))
 
 reg = LinearRegression()
 model = reg.fit(XTrain, YTrain)
 print(reg.score(XTest,YTest))
+

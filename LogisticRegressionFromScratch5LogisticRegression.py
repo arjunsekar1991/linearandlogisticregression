@@ -147,9 +147,9 @@ class LogisticRegression:
                 return finalPrediction
 
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
-dataWithColumnsRequired = rawData[[  'CBSE_01',  'CBSE_02','LEVEL' ]]
 #dataWithColumnsRequired = rawData[[  'CBSE_01',  'CBSE_02','LEVEL' ]]
-#dataWithColumnsRequired = rawData[[  'all_mcqs_avg_n20', 'all_NBME_avg_n4','LEVEL' ]]
+#dataWithColumnsRequired = rawData[[  'CBSE_01',  'CBSE_02','LEVEL' ]]
+dataWithColumnsRequired = rawData[[  'all_mcqs_avg_n20',  'CBSE_02','LEVEL' ]]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
 
 
@@ -157,8 +157,8 @@ x = dataWithColumnsRequiredWithoutNull.drop('LEVEL',axis=1).values
 ynonfactor = dataWithColumnsRequiredWithoutNull.LEVEL
 y= ynonfactor.replace(to_replace=['A', 'B','C','D'], value=[0,1,2,3])
 #feature selection
-
 '''
+
 test = SelectKBest(score_func=chi2, k=4)
 fit = test.fit(x, y)
 # summarize scores
@@ -169,8 +169,8 @@ features = fit.transform(x)
 print("feature importance",features[0:5,:])
 #end Feature selection
 #print(y)
-
 '''
+
 
 
 XTrain,XTest,YTrain,YTest = train_test_split(x,y,test_size=0.4,random_state=0)

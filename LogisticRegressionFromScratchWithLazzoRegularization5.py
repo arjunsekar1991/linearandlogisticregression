@@ -144,7 +144,7 @@ class LogisticRegression:
                 return finalPrediction
 
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
-dataWithColumnsRequired = rawData[[  'CBSE_01',  'CBSE_02','LEVEL' ]]
+dataWithColumnsRequired = rawData[[  'all_mcqs_avg_n20','CBSE_02','LEVEL' ]]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
 
 
