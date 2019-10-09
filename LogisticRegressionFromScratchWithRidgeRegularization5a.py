@@ -89,8 +89,8 @@ class LogisticRegression:
                         print("optimum cost reached at" , i)
                         break
                 prediction = 1/(1+numpy.exp(-self.XTrain.dot(th)))
-                th = th - (self.learningRate / self.numberOfInstances) * (self.XTrain.T).dot(prediction - YTrainOneVSALL)
-
+                th = th - (self.learningRate *((1/ self.numberOfInstances) * (self.XTrain.T).dot(prediction - YTrainOneVSALL)+(th* (self.Lambda/self.numberOfInstances))))
+                th[0] = th[0]- (self.learningRate / self.numberOfInstances) * (self.XTrain.T).dot(prediction - YTrainOneVSALL)[0]
                 i+=1
             self.theta.append(th)
             self.costCalculated.append(costCalculatedInEveryIterationForEachClass)
