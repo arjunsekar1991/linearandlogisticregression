@@ -22,7 +22,7 @@ class LogisticRegression:
         self.YTrain = YTrain.to_numpy().reshape(self.numberOfInstances,1)
         self.theta = []
         self.costCalculated = []
-        self.Lambda = 0.1
+        self.Lambda = 0.01
       #  print(self.theta)
         self.learningRate =0.08
       #  print(self.numberOfClasses)
