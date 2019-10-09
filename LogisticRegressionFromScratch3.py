@@ -23,7 +23,7 @@ class LogisticRegression:
         self.theta = []
         self.costCalculated = []
       #  print(self.theta)
-        self.learningRate =0.08
+        self.learningRate =0.1
       #  print(self.numberOfClasses)
     def  calculateCostJTheta(self,theta,YTrainOneVSALL):
        # print("theta",theta)
