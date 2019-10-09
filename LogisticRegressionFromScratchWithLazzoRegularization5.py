@@ -49,7 +49,7 @@ class LogisticRegression:
             plt.ylabel('Epochs')
             plt.xlabel('Cost jThetha')
     def gradientDescent(self):
-        #nonregulazied =self.XTrain
+        nonregulazied =self.XTrain
         #print(nonregulazied)
         regularized = (self.XTrain - self.XTrain.mean())/(self.XTrain.max()-self.XTrain.min())
         #regularized= self.featureScalingUsingMinMaxNormalization(nonregulazied)
@@ -144,7 +144,8 @@ class LogisticRegression:
                 return finalPrediction
 
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
-dataWithColumnsRequired = rawData[[ 'all_NBME_avg_n4','CBSE_01', 'all_mcqs_avg_n20','CBSE_02','LEVEL' ]]
+dataWithColumnsRequired = rawData[['all_mcqs_avg_n20', 'all_NBME_avg_n4','CBSE_01','CBSE_02','LEVEL' ]]
+#dataWithColumnsRequired = rawData[[ 'all_NBME_avg_n4','CBSE_01','CBSE_02','LEVEL' ]]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
 
 
