@@ -39,7 +39,7 @@ class LogisticRegression:
            #Ridge
             #regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(theta**2)
             #Lasso
-            regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(abs(theta))
+            regCost= cost + self.Lambda/(2*self.numberOfInstances) * sum(numpy.linalg.norm(theta,1,axis=0))
             #Lasso
 
             return regCost
@@ -49,12 +49,12 @@ class LogisticRegression:
             plt.ylabel('Epochs')
             plt.xlabel('Cost jThetha')
     def gradientDescent(self):
-        #nonregulazied =self.XTrain
+        nonregulazied =self.XTrain
         #print(nonregulazied)
         regularized = (self.XTrain - self.XTrain.mean())/(self.XTrain.max()-self.XTrain.min())
         #regularized= self.featureScalingUsingMinMaxNormalization(nonregulazied)
         #print(regularized)
-        self.XTrain = numpy.c_[numpy.ones((len(regularized), 1)), regularized]
+        self.XTrain = numpy.c_[numpy.ones((len(nonregulazied), 1)), nonregulazied]
 
 
         #th =  numpy.random.rand(self.numberOfFeatures+1,1)
@@ -100,7 +100,7 @@ class LogisticRegression:
 
     def predict(self,X):
                # X = self.featureScalingUsingMinMaxNormalization(X)
-                X=(X - X.mean())/(X.max()-X.min())
+               # X=(X - X.mean())/(X.max()-X.min())
                 X = numpy.c_[numpy.ones((len(X), 1)), X]
                 #print(X)
                 maximumLikelihood = []
