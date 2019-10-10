@@ -175,7 +175,7 @@ plt.xlabel('Predicted Label')
 plt.title('Confusion Matrix')
 plt.show()
 #con.plot()
-print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(YTrain)))
+print(f1_score(truelabels, predictedLabels, average='micro', labels=numpy.unique(YTrain)))
 
 #clf = LogisticRegression()
 

@@ -1,5 +1,5 @@
 import numpy
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sn
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
@@ -184,8 +184,8 @@ plt.xlabel('Predicted Label')
 plt.title('Confusion Matrix')
 plt.show()
 #con.plot()
-print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(YTrain)))
-
+#print(f1_score(truelabels, predictedLabels, average='micro', labels=numpy.unique(YTrain)))
+print(classification_report(truelabels, predictedLabels, labels=numpy.unique(YTrain)))
 #clf = LogisticRegression()
 
 

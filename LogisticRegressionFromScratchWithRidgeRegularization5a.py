@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 
 from sklearn.preprocessing import LabelEncoder
 
-
+from sklearn.metrics import classification_report
 class LogisticRegression:
 
     def __init__(self, XTrain, YTrain,lambdaValue, normalization=True):
@@ -144,7 +144,7 @@ class LogisticRegression:
                 return finalPrediction
 
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
-dataWithColumnsRequired = rawData[[   'all_NBME_avg_n4', 'CBSE_02','LEVEL' ]]
+dataWithColumnsRequired = rawData[[   'all_mcqs_avg_n20', 'CBSE_02','LEVEL' ]]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
 
 
@@ -184,7 +184,9 @@ for lmdaValue in lambdaList:
     plt.title('Confusion Matrix')
     plt.show()
     #con.plot()
-    print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(YTrain)))
+    #print("f1 score ",f1_score(truelabels, predictedLabels, average='micro', labels=numpy.unique(YTrain)))
+    #print(classification_report(truelabels, predictedLabels, labels=numpy.unique(YTrain)))
+    print(classification_report(truelabels, predictedLabels, labels=numpy.unique(YTrain)))
 
     #clf = LogisticRegression()
 
