@@ -54,7 +54,7 @@ class LogisticRegression:
         regularized = (self.XTrain - self.XTrain.mean())/(self.XTrain.max()-self.XTrain.min())
         #regularized= self.featureScalingUsingMinMaxNormalization(nonregulazied)
         #print(regularized)
-        self.XTrain = numpy.c_[numpy.ones((len(nonregulazied), 1)), nonregulazied]
+        self.XTrain = numpy.c_[numpy.ones((len(regularized), 1)), regularized]
 
 
         #th =  numpy.random.rand(self.numberOfFeatures+1,1)
@@ -100,7 +100,7 @@ class LogisticRegression:
 
     def predict(self,X):
                # X = self.featureScalingUsingMinMaxNormalization(X)
-                #X=(X - X.mean())/(X.max()-X.min())
+                X=(X - X.mean())/(X.max()-X.min())
                 X = numpy.c_[numpy.ones((len(X), 1)), X]
                 #print(X)
                 maximumLikelihood = []
@@ -144,7 +144,7 @@ class LogisticRegression:
                 return finalPrediction
 
 rawData = pandas.read_csv('BSOM_DataSet_for_HW2.csv')
-dataWithColumnsRequired = rawData[[   'all_mcqs_avg_n20', 'CBSE_02','LEVEL' ]]
+dataWithColumnsRequired = rawData[[   'all_NBME_avg_n4', 'CBSE_02','LEVEL' ]]
 dataWithColumnsRequiredWithoutNull = dataWithColumnsRequired.dropna(axis = 0, how ='any')
 
 
@@ -184,7 +184,7 @@ for lmdaValue in lambdaList:
     plt.title('Confusion Matrix')
     plt.show()
     #con.plot()
-    print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(predictedLabels)))
+    print(f1_score(truelabels, predictedLabels, average='macro', labels=numpy.unique(YTrain)))
 
     #clf = LogisticRegression()
 
